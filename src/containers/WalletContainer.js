@@ -1,162 +1,111 @@
-import React, { Component } from 'react';
-import TransferForm from '../components/TransferForm'
-import TransferList from '../components/TransferList'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import TransferForm from 'components/TransferForm'
+import TransferList from 'components/TransferList'
+
 import { message } from 'antd'
 
-import Loading from '../components/Loading'
-import url from '../config'
+import Loading from 'components/Loading'
+
+import {postTransfer} from 'services/Transfers'
+import {getWallet} from 'services/Wallets';
 
 
-export default class Wallet extends Component {
+export default function Wallet() {
 
-    state = {
-        money: 0.0,
-        transfers: [],
-        error: null,
-        loading: false,
-        form: {
-            description: '',
-            amount: '',
-            wallet_id: 1
-        }
-    }
+    const [money, setMoney] = useState(0.0)
+    const [transfers, setTransfers] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const [form, setForm] = useState({
+        description: '',
+        amount: '',
+        wallet_id: 1
+    })
 
 
 
     //Va a esperar por los eventos en los inputs
-    handleChange = e => {
+    const handleChange = e => {
 
         //Vamos a cambiar el estado de form mientras cambie el atributo name del componente TransferForm
-        this.setState({
-            //con ...this.state.form, le decimos que mantenga lo que yay existe, para que no sobrescriba los inouts
-            form: {
-                ...this.state.form,
-                [e.target.name]: e.target.value,
-            }
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
         })
     }
 
-    handleSubmit = e => {
+    const handleSubmit = e => {
         //Primero anulamos es refresco de la pagina
         e.preventDefault()
 
         console.log(e)
-        this.setState({
-            loading: true
+        setLoading(true)
+
+        postTransfer(form).then(function ({ amount, transfer }) {
+            setMoney(money + amount)
+            setTransfers(transfers.concat(transfer))
+
+            setForm({
+                description: "",
+                amount: "",
+                wallet_id: 1,
+            });
+            setLoading(false)
+            message.success('Transfer saved!')
+
+        }).catch(function ({ error }) {
+            setError(error)
         })
 
 
-
-        axios.post(`${url}/transfer`, this.state.form)
-            .then(res => {
-                this.setState({
-                    transfers: this.state.transfers.concat(res.data),
-                    money: this.state.money + (parseInt(res.data.amount)),
-                    form: {
-                        description: '',
-                        amount: '',
-                        wallet_id: 1
-                    },
-                    loading: false
-                });
-                message.success('This is a success message');
-            }).catch(error => {
-                this.setState({
-                    error
-                })
-            })
-
-
-        // try {
-        //     //Para enviar info debemos crear un objeto de configuracion
-        //     let config = {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'aplication/json',
-        //             'Content-Type': 'aplication/json'
-        //         },
-        //         body: JSON.stringify(this.state.form)
-        //     }
-
-        //     //Realizamos la peticion
-        //     let res = await fetch(`${url}/transfer`, config)
-        //     let data = await res.json()
-
-
-        //     //Si todo sale bien, vamos a tener la data, entocnes actualizamos el estado
-        //     this.setState({
-        //         transfers: this.state.transfers.concat(data),
-        //         money: this.state.money + (parseInt(data.amount)),
-        //         form: {
-        //             description: '',
-        //             amount: '',
-        //             wallet_id: 1
-        //         },
-        //         loading: false
-        //     })
-
-        // } catch (error) {
-        //     this.setState({
-        //         error
-        //     })
-        // }
-
     }
 
-    async componentDidMount() {
-        this.setState({
-            loading: true
+    useEffect(function () {
+        setLoading(true)
+
+        getWallet().then(function ({ money, transfers }) {
+            setMoney(money)
+            setTransfers(transfers)
+            setLoading(false)
+
+        }).catch(function ({ error }) {
+            setError(error)
         })
 
 
-        axios.get(`${url}/wallet`)
-            .then(res => {
-                this.setState({
-                    money: res.data.money,
-                    transfers: res.data.transfers,
-                    loading: false
-                })
-            })
-            .catch((error) => {
-                this.setState({
-                    error
-                })
-            })
-
-    }
+    }, [])
 
 
-    render() {
-        if (this.state.loading === true) {
-            return (
-                <Loading />
-            )
-        }
+
+    if (loading) {
         return (
-            <div className="container">
-                <div className="row text-center">
-                    <div className="col-md-12 m-t-md">
-                        <p className="title" style={{ fontSize: "84px" }}>
-                            $ {this.state.money}
-                        </p>
-                    </div>
-                    <div className="col-md-12">
-                        <TransferForm
-                            form={this.state.form}
-                            onChange={this.handleChange}
-                            onSubmit={this.handleSubmit}
-                        />
-                    </div>
+            <Loading />
+        )
+    }
+    return (
+        <div className="container">
+            <div className="row text-center">
+                <div className="col-md-12 m-t-md">
+                    <p className="title" style={{ fontSize: "84px" }}>
+                        $ {money}
+                    </p>
                 </div>
-                <div className="m-t-md text-center">
-                    <TransferList
-                        transfers={this.state.transfers}
+                <div className="col-md-12">
+                    <TransferForm
+                        form={form}
+                        onChange={handleChange}
+                        onSubmit={handleSubmit}
                     />
                 </div>
             </div>
-        )
-    }
+            <div className="m-t-md text-center">
+                <TransferList
+                    transfers={transfers}
+                />
+            </div>
+        </div>
+    )
+
 }
 
 

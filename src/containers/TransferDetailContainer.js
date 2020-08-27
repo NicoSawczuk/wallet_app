@@ -1,54 +1,59 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card } from 'antd';
-import url from '../config'
-import axios from 'axios'
-import Loading from '../components/Loading'
 
-export default class TransferDetailContainer extends Component {
+import { getTransferDetails } from 'services/Transfers';
+import CardLoader from 'components/CardLoader';
 
-    state = {
-        loading: false,
-        error: null,
-        transfer: {
-            description: '',
-            amount: '',
-            wallet_id: 1
-        }
-    }
+export default function TransferDetailContainer({ id }) {
 
-    componentDidMount = () => {
-        this.setState({
-            loading: true
-        })
-        axios.get(`${url}/transfer/${this.props.id}`)
-            .then(res => {
-                this.setState({
-                    transfer: res.data,
-                    loading: false
-                })
-            }).catch(error => {
-                this.setState({
-                    error
-                })
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const [transfer, setTransfer] = useState({
+        description: '',
+        amount: '',
+        wallet_id: 1
+    })
+
+    useEffect(function () {
+        setLoading(true)
+
+        getTransferDetails(id)
+            .then(function ({ transfer }) {
+                setTransfer(transfer)
+                setLoading(false)
             })
-    }
+            .catch(function ({ error }) {
+                setError(error)
+            })
 
-    render() {
-        if (this.state.loading === true) {
-            return (
-                <Loading />
-            )
-        }
+    }, [id])
+
+
+
+    if (loading === true) {
         return (
-            <div className="mt-2 container">
-                <center>
-                    <Card title="Detalle de transferencia" style={{ width: "50%" }}>
-                        <p class="text-left">Description: {this.state.transfer.description}</p>
-                        <p class="text-left">Amount: ${this.state.transfer.amount}</p>
-                        <p class="text-left">Wallet: {this.state.transfer.wallet_id}</p>
-                    </Card>
-                </center>
-            </div>
+            <center>
+                <CardLoader
+                    speed={6}
+                    width={1500}
+                    height={245}
+                    viewBox="0 0 790 360"
+                    backgroundColor="#f5f5f5"
+                    foregroundColor="#dbdbdb"
+                />
+            </center>
         )
     }
+    return (
+
+        <div className="mt-2 container">
+            <center>
+                <Card title="Detalle de transferencia" style={{ width: "40%", textAlign: 'center' }}>
+                    <p className="text-left">Description: {transfer.description}</p>
+                    <p className="text-left">Amount: ${transfer.amount}</p>
+                    <p className="text-left">Wallet: {transfer.wallet_id}</p>
+                </Card>
+            </center>
+        </div>
+    )
 }
