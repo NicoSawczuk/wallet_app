@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import HomeWallet from '../pages/HomeWallet'
-import NotFound from '../pages/NotFound'
-import TransferDetail from '../pages/TransferDetail'
-import MyContacts from '../pages/MyContacts'
+import HomeWallet from 'pages/HomeWallet'
+import NotFound from 'pages/NotFound'
+import TransferDetail from 'pages/TransferDetail'
+import MyContacts from 'pages/MyContacts'
 
 const Routes = () => {
     return (

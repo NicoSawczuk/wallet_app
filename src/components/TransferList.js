@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import 'antd/dist/antd.css';
 import { Table, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import { EyeOutlined } from '@ant-design/icons'
-import Loading from './Loading';
 
 const TransferList = ({ transfers }) => {
 

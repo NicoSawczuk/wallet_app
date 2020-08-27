@@ -35,11 +35,10 @@ const ContactsList = ({ contacts }) => {
         }
         dataSource.push(cont)
     })
-    console.log(dataSource)
 
     return (
         <div className="container mt-2">
-            <Table dataSource={dataSource} columns={columns} size="middle" />
+            <Table dataSource={dataSource} columns={columns}  />
         </div>
     )
 }
