@@ -1,7 +1,7 @@
 import React from 'react'
 
-import NavBar from '../components/NavBar'
-import TransferDetailContainer from '../containers/TransferDetailContainer'
+import NavBar from 'components/NavBar'
+import TransferDetailContainer from 'containers/TransferDetailContainer'
 
 
 export default class TransferDetail extends React.Component {
