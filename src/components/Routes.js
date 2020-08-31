@@ -14,7 +14,7 @@ const Routes = () => {
                 <Route exact path="/transfer/:id" component={TransferDetail} />
 
                 <Route exact path="/contacts/" component={MyContacts} />
-                <Route component={NotFound} />
+                <Route exact path="/notfound/" component={NotFound} />
             </Switch>
         </Router>
     )

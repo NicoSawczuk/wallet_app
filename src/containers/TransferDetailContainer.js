@@ -30,7 +30,7 @@ export default function TransferDetailContainer({ id }) {
 
 
 
-    if (loading === true) {
+    if (loading) {
         return (
             <center>
                 <CardLoader

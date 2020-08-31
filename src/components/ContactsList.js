@@ -1,7 +1,7 @@
 import React from 'react'
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 
-const ContactsList = ({ contacts }) => {
+const ContactsList = ({ contacts, loadContactForm }) => {
 
     const columns = [
         {
@@ -21,17 +21,28 @@ const ContactsList = ({ contacts }) => {
             dataIndex: 'phonenumber',
             key: 'phonenumber',
             align: 'right'
+        },
+        {
+            title: 'Options',
+            dataIndex: 'options',
+            key: 'options',
+            align: 'right'
         }
     ];
 
     const dataSource = [];
+
+    const passContactData = (value) =>{
+        loadContactForm(value)
+    }
 
     contacts.map((contact) => {
         let cont = {
             key: contact.id,
             firstname: contact.firstname,
             lastname: contact.lastname,
-            phonenumber: contact.phonenumber
+            phonenumber: contact.phonenumber,
+            options: <Button value="small" onClick={() => passContactData(contact)}>Edit</Button>
         }
         dataSource.push(cont)
     })

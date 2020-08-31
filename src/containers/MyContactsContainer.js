@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import ContactsList from 'components/ContactsList'
 import NewContactForm from 'components/NewContactForm'
 import Loading from 'components/Loading'
-import { getMyContacts, postContact} from "services/Contacts"
+import { getMyContacts, postContact } from "services/Contacts"
 import { Card, Modal, Button, message } from 'antd'
+import NotFound from 'pages/NotFound';
 
 
 export default function MyContactsContainer() {
@@ -12,6 +13,7 @@ export default function MyContactsContainer() {
     const [error, setError] = useState(null)
     const [visibleModal, setVisibleModal] = useState(false)
     const [formContact, setFormContact] = useState({ firstname: '', lastname: '', phonenumber: '' })
+    const [edit, setEdit] = useState(false)
     const gridStyle = {
         width: '80%',
         marginTop: '20px',
@@ -20,6 +22,8 @@ export default function MyContactsContainer() {
     };
 
     const showModal = () => {
+        setEdit(false)
+        setFormContact({ firstname: '', lastname: '', phonenumber: '' }) 
         setVisibleModal(true)
     };
 
@@ -32,22 +36,37 @@ export default function MyContactsContainer() {
             ...formContact,
             [e.target.name]: e.target.value,
         })
+        console.log(formContact)
     }
 
     const handleSubmitForm = e => {
-        console.log(formContact)
         setLoading(true)
-        postContact(formContact)
-        .then(function({contact}){
-            setContacts(contacts.concat(contact))
-            setFormContact({ firstname: '', lastname: '', phonenumber: '' })
-            setVisibleModal(false)
-            setLoading(false)
-            message.success('Contact saved!')
-        })
-        .catch(function ({ error }) {
-            setError(error)
-        })
+        if(!edit){
+            postContact(formContact)
+            .then(function ({ contact }) {
+                setContacts(contacts.concat(contact))
+                setFormContact({ firstname: '', lastname: '', phonenumber: '' })
+                setVisibleModal(false)
+                setLoading(false)
+                message.success('Contact saved!')
+            })
+            .catch(function ({ error }) {
+                setError(error)
+            })
+        }else{
+            //
+        }
+    }
+
+    const handleEditForm = (value) => {
+        setEdit(true)
+        setFormContact({
+            firstname: value.firstname,
+            lastname: value.lastname,
+            phonenumber: value.phonenumber
+        }) 
+        setVisibleModal(true)
+
     }
 
     useEffect(function () {
@@ -56,15 +75,20 @@ export default function MyContactsContainer() {
         //Pedimos los contactos
         getMyContacts()
             .then(
+
                 ({ contacts }) => {
                     setContacts(contacts)
                     setLoading(false)
                 })
             .catch((error) => {
                 setError(error)
+                setLoading(false)
             })
     }, [])
 
+    if (error) {
+        return (<NotFound />)
+    }
     return (
         <>
             {loading ? <Loading /> :
@@ -74,27 +98,32 @@ export default function MyContactsContainer() {
                         title="My Contacts"
                         extra={<Button type="primary" onClick={showModal}>New</Button>}
                         style={gridStyle}>
-                        <ContactsList contacts={contacts} />
+                        <ContactsList
+                            contacts={contacts}
+                            loadContactForm={handleEditForm} />
                         <Modal
                             title="New Contact"
                             visible={visibleModal}
                             footer={[
                                 <Button key="back" onClick={handleCancel}>
-                                  Close
+                                    Close
                                 </Button>,
-                              ]}
+                            ]}
                         >
                             <div>
                                 <NewContactForm
                                     form={formContact}
                                     onChange={handleChangeForm}
-                                    onSubmit={handleSubmitForm} />
+                                    onSubmit={handleSubmitForm}
+                                />
                             </div>
                         </Modal>
                     </Card>
                 </>
             }
+
         </>
+
     )
 
 }

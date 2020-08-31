@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import TransferForm from 'components/TransferForm'
 import TransferList from 'components/TransferList'
+import NotFound from 'pages/NotFound';
 
 import { message } from 'antd'
 
 import Loading from 'components/Loading'
 
-import {postTransfer} from 'services/Transfers'
-import {getWallet} from 'services/Wallets';
+import { postTransfer } from 'services/Transfers'
+import { getWallet } from 'services/Wallets';
 
 
 export default function Wallet() {
@@ -68,44 +69,47 @@ export default function Wallet() {
             setTransfers(transfers)
             setLoading(false)
 
-        }).catch(function ({ error }) {
+        })
+        .catch((error) => {
             setError(error)
+            setLoading(false)
         })
 
 
     }, [])
 
 
-
-    if (loading) {
-        return (
-            <Loading />
-        )
+    if (error) {
+        return (<NotFound />)
     }
-    return (
-        <div className="container">
-            <div className="row text-center">
-                <div className="col-md-12 m-t-md">
-                    <p className="title" style={{ fontSize: "84px" }}>
-                        $ {money}
-                    </p>
-                </div>
-                <div className="col-md-12">
-                    <TransferForm
-                        form={form}
-                        onChange={handleChange}
-                        onSubmit={handleSubmit}
-                    />
-                </div>
-            </div>
-            <div className="m-t-md text-center">
-                <TransferList
-                    transfers={transfers}
-                />
-            </div>
-        </div>
-    )
 
+    return (
+        <>
+            {loading ? <Loading /> :
+                <>
+                    <div className="container">
+                        <div className="row text-center">
+                            <div className="col-md-12 m-t-md">
+                                <p className="title" style={{ fontSize: "84px" }}>
+                                    $ {money}
+                                </p>
+                            </div>
+                            <div className="col-md-12">
+                                <TransferForm
+                                    form={form}
+                                    onChange={handleChange}
+                                    onSubmit={handleSubmit}
+                                />
+                            </div>
+                        </div>
+                        <div className="m-t-md text-center">
+                            <TransferList
+                                transfers={transfers}
+                            />
+                        </div>
+                    </div></>}
+        </>
+    )
 }
 
 

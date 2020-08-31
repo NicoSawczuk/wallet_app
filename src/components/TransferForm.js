@@ -26,7 +26,7 @@ const TransferForm = ({ form, onChange, onSubmit }) => {
         </div>
         <div className=" mb-2 ml-1">
             <Button color="primary" type="primary" onClick={onSubmit}>
-                Registrar
+                Save
             </Button>
         </div>
 

@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd'
 
 export default function NewContactForm({ form, onChange, onSubmit }) {
 
-
+    console.log(form)
 
     return (
         <>
@@ -17,20 +17,36 @@ export default function NewContactForm({ form, onChange, onSubmit }) {
                 }}
                 layout="horizontal"
                 onFinish={onSubmit}
+                initialValues={{firstname: form.firstname, lastname: form.lastname, phonenumber: form.phonenumber}}
             >
-                <Form.Item label="Firstname" rules={[{ required: true, message: 'Please type your firstname' }]}>
-                    <Input name="firstname" value={form.firstname} onChange={onChange} />
+                <Form.Item
+                    label="Firstname"
+                    name="firstname"
+                    rules={[{ required: true, message: 'Please type your firstname' }]}
+                >
+                    <Input name="firstname" onChange={onChange} placeholder="Enter firstname" />
                 </Form.Item>
-                <Form.Item label="Lastname" rules={[{ required: true, message: 'Please type your lastname' }]}>
-                    <Input name="lastname" onChange={onChange} />
+                <Form.Item
+                    label="Lastname"
+                    name="lastname"
+                    rules={[{ required: true, message: 'Please type your lastname' }]}
+                >
+                    <Input name="lastname" onChange={onChange} placeholder="Enter lastname" />
                 </Form.Item>
-                <Form.Item label="Phone number" wrapperCol={{ span: 8, }}>
-                    <Input name="phonenumber" onChange={onChange} />
+                <Form.Item
+                    label="Phone number"
+                    name="phonenumber"
+                    wrapperCol={{ span: 8, }}
+                    rules={[{ required: true, message: 'Please type your phonenumber' }]}
+                >
+                    <Input name="phonenumber" onChange={onChange} placeholder="Enter phonenumber" />
                 </Form.Item >
-                <Form.Item  style={{ marginLeft: '120px', }}>
+                <Form.Item
+                    style={{ marginLeft: '120px', }}>
                     <Button
-                        type="primary" htmlType="submit">
-                        Guardar
+                        type="primary"
+                        htmlType="submit">
+                        Save
                     </Button>
                 </Form.Item>
             </Form>
