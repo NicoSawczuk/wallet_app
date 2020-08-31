@@ -4,8 +4,6 @@ import { Form, Input, Button } from 'antd'
 
 export default function NewContactForm({ form, onChange, onSubmit }) {
 
-    console.log(form)
-
     return (
         <>
             <Form
@@ -17,7 +15,8 @@ export default function NewContactForm({ form, onChange, onSubmit }) {
                 }}
                 layout="horizontal"
                 onFinish={onSubmit}
-                initialValues={{firstname: form.firstname, lastname: form.lastname, phonenumber: form.phonenumber}}
+                form={form}
+                // initialValues={{firstname: form.firstname, lastname: form.lastname, phonenumber: form.phonenumber}}
             >
                 <Form.Item
                     label="Firstname"

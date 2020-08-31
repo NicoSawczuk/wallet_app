@@ -3,7 +3,7 @@ import ContactsList from 'components/ContactsList'
 import NewContactForm from 'components/NewContactForm'
 import Loading from 'components/Loading'
 import { getMyContacts, postContact } from "services/Contacts"
-import { Card, Modal, Button, message } from 'antd'
+import { Card, Modal, Button, message, Form } from 'antd'
 import NotFound from 'pages/NotFound';
 
 
@@ -14,6 +14,7 @@ export default function MyContactsContainer() {
     const [visibleModal, setVisibleModal] = useState(false)
     const [formContact, setFormContact] = useState({ firstname: '', lastname: '', phonenumber: '' })
     const [edit, setEdit] = useState(false)
+    const [form] = Form.useForm();
     const gridStyle = {
         width: '80%',
         marginTop: '20px',
@@ -21,9 +22,15 @@ export default function MyContactsContainer() {
         marginRight: 'auto',
     };
 
+
     const showModal = () => {
         setEdit(false)
-        setFormContact({ firstname: '', lastname: '', phonenumber: '' }) 
+        setFormContact({ firstname: '', lastname: '', phonenumber: '' })
+        form.setFieldsValue({
+            firstname: '',
+            lastname: '',
+            phonenumber: '',
+        })
         setVisibleModal(true)
     };
 
@@ -36,35 +43,39 @@ export default function MyContactsContainer() {
             ...formContact,
             [e.target.name]: e.target.value,
         })
-        console.log(formContact)
     }
 
     const handleSubmitForm = e => {
         setLoading(true)
-        if(!edit){
+        if (!edit) {
             postContact(formContact)
-            .then(function ({ contact }) {
-                setContacts(contacts.concat(contact))
-                setFormContact({ firstname: '', lastname: '', phonenumber: '' })
-                setVisibleModal(false)
-                setLoading(false)
-                message.success('Contact saved!')
-            })
-            .catch(function ({ error }) {
-                setError(error)
-            })
-        }else{
+                .then(function ({ contact }) {
+                    setContacts(contacts.concat(contact))
+                    setFormContact({ firstname: '', lastname: '', phonenumber: '' })
+                    form.setFieldsValue({
+                        firstname: '',
+                        lastname: '',
+                        phonenumber: '',
+                    })
+                    setVisibleModal(false)
+                    setLoading(false)
+                    message.success('Contact saved!')
+                })
+                .catch(function ({ error }) {
+                    setError(error)
+                })
+        } else {
             //
         }
     }
 
     const handleEditForm = (value) => {
         setEdit(true)
-        setFormContact({
+        form.setFieldsValue({
             firstname: value.firstname,
             lastname: value.lastname,
-            phonenumber: value.phonenumber
-        }) 
+            phonenumber: value.phonenumber,
+        })
         setVisibleModal(true)
 
     }
@@ -112,7 +123,7 @@ export default function MyContactsContainer() {
                         >
                             <div>
                                 <NewContactForm
-                                    form={formContact}
+                                    form={form}
                                     onChange={handleChangeForm}
                                     onSubmit={handleSubmitForm}
                                 />
