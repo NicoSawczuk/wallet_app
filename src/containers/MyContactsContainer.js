@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ContactsList from 'components/ContactsList'
 import NewContactForm from 'components/NewContactForm'
 import Loading from 'components/Loading'
-import { getMyContacts, postContact } from "services/Contacts"
+import { getMyContacts, postContact, patchContact } from "services/Contacts"
 import { Card, Modal, Button, message, Form } from 'antd'
 import NotFound from 'pages/NotFound';
 
@@ -12,7 +12,6 @@ export default function MyContactsContainer() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [visibleModal, setVisibleModal] = useState(false)
-    const [formContact, setFormContact] = useState({ firstname: '', lastname: '', phonenumber: '' })
     const [edit, setEdit] = useState(false)
     const [form] = Form.useForm();
     const gridStyle = {
@@ -25,7 +24,6 @@ export default function MyContactsContainer() {
 
     const showModal = () => {
         setEdit(false)
-        setFormContact({ firstname: '', lastname: '', phonenumber: '' })
         form.setFieldsValue({
             firstname: '',
             lastname: '',
@@ -38,20 +36,18 @@ export default function MyContactsContainer() {
         setVisibleModal(false)
     };
 
-    const handleChangeForm = e => {
-        setFormContact({
-            ...formContact,
-            [e.target.name]: e.target.value,
-        })
-    }
 
     const handleSubmitForm = e => {
         setLoading(true)
         if (!edit) {
-            postContact(formContact)
+            const obj = {
+                firstname: form.getFieldValue('firstname'),
+                lastname: form.getFieldValue('lastname'),
+                phonenumber: form.getFieldValue('phonenumber'),
+            }
+            postContact(obj)
                 .then(function ({ contact }) {
                     setContacts(contacts.concat(contact))
-                    setFormContact({ firstname: '', lastname: '', phonenumber: '' })
                     form.setFieldsValue({
                         firstname: '',
                         lastname: '',
@@ -65,13 +61,40 @@ export default function MyContactsContainer() {
                     setError(error)
                 })
         } else {
-            //
+            //armo mi objeto para enviar
+            const obj = {
+                id: form.getFieldValue('id'),
+                firstname: form.getFieldValue('firstname'),
+                lastname: form.getFieldValue('lastname'),
+                phonenumber: form.getFieldValue('phonenumber'),
+            }
+            patchContact(obj)
+                .then(function ({ contact }) {
+                    setContacts(function (contacts) {
+                        contacts.find(el => el.id === obj.id).firstname = contact.firstname
+                        contacts.find(el => el.id === obj.id).lastname = contact.lastname
+                        contacts.find(el => el.id === obj.id).phonenumber = contact.phonenumber
+                        return contacts
+                    })
+                    form.setFieldsValue({
+                        firstname: '',
+                        lastname: '',
+                        phonenumber: '',
+                    })
+                    setVisibleModal(false)
+                    setLoading(false)
+                    message.success(`${obj.firstname} ${obj.lastname} updated!`)
+                })
+                .catch(function ({ error }) {
+                    setError(error)
+                })
         }
     }
 
     const handleEditForm = (value) => {
         setEdit(true)
         form.setFieldsValue({
+            id: value.id,
             firstname: value.firstname,
             lastname: value.lastname,
             phonenumber: value.phonenumber,
@@ -124,7 +147,6 @@ export default function MyContactsContainer() {
                             <div>
                                 <NewContactForm
                                     form={form}
-                                    onChange={handleChangeForm}
                                     onSubmit={handleSubmitForm}
                                 />
                             </div>

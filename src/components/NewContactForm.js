@@ -16,21 +16,20 @@ export default function NewContactForm({ form, onChange, onSubmit }) {
                 layout="horizontal"
                 onFinish={onSubmit}
                 form={form}
-                // initialValues={{firstname: form.firstname, lastname: form.lastname, phonenumber: form.phonenumber}}
             >
                 <Form.Item
                     label="Firstname"
                     name="firstname"
                     rules={[{ required: true, message: 'Please type your firstname' }]}
                 >
-                    <Input name="firstname" onChange={onChange} placeholder="Enter firstname" />
+                    <Input name="firstname" placeholder="Enter firstname" />
                 </Form.Item>
                 <Form.Item
                     label="Lastname"
                     name="lastname"
                     rules={[{ required: true, message: 'Please type your lastname' }]}
                 >
-                    <Input name="lastname" onChange={onChange} placeholder="Enter lastname" />
+                    <Input name="lastname" placeholder="Enter lastname" />
                 </Form.Item>
                 <Form.Item
                     label="Phone number"
@@ -38,7 +37,7 @@ export default function NewContactForm({ form, onChange, onSubmit }) {
                     wrapperCol={{ span: 8, }}
                     rules={[{ required: true, message: 'Please type your phonenumber' }]}
                 >
-                    <Input name="phonenumber" onChange={onChange} placeholder="Enter phonenumber" />
+                    <Input name="phonenumber" placeholder="Enter phonenumber" />
                 </Form.Item >
                 <Form.Item
                     style={{ marginLeft: '120px', }}>

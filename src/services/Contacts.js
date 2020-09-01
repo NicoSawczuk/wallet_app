@@ -38,5 +38,12 @@ export async function postContact(form) {
     }
 }
 
+export async function patchContact(form) {
+    const res = await axios.patch(`${API_URL}/contacts`, form);
+    return {
+        contact: res.data,
+    }
+}
+
 
 
