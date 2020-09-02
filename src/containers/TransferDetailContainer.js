@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card } from 'antd';
 
-import { getTransferDetails } from 'services/Transfers';
+import { getTransferDetails } from 'services/TransferService';
 import CardLoader from 'components/CardLoader';
 
 export default function TransferDetailContainer({ id }) {

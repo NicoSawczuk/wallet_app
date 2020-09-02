@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, Button } from 'antd';
-
+import { EditFilled } from '@ant-design/icons';
 const ContactsList = ({ contacts, loadContactForm }) => {
 
     const columns = [
@@ -42,7 +42,7 @@ const ContactsList = ({ contacts, loadContactForm }) => {
             firstname: contact.firstname,
             lastname: contact.lastname,
             phonenumber: contact.phonenumber,
-            options: <Button value="small" onClick={() => passContactData(contact)}>Edit</Button>
+            options: <Button value="small" onClick={() => passContactData(contact)}><EditFilled /></Button>
         }
         dataSource.push(cont)
     })

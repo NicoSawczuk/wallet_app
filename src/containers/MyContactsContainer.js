@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ContactsList from 'components/ContactsList'
 import NewContactForm from 'components/NewContactForm'
 import Loading from 'components/Loading'
-import { getMyContacts, postContact, patchContact } from "services/Contacts"
+import { getMyContacts, postContact, patchContact } from "services/ContactService"
 import { Card, Modal, Button, message, Form } from 'antd'
 import NotFound from 'pages/NotFound';
 

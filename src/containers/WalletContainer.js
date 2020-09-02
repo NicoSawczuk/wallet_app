@@ -7,8 +7,8 @@ import { message } from 'antd'
 
 import Loading from 'components/Loading'
 
-import { postTransfer } from 'services/Transfers'
-import { getWallet } from 'services/Wallets';
+import { postTransfer } from 'services/TransferService'
+import { getWallet } from 'services/WalletService';
 
 
 export default function Wallet() {
