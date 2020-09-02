@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import ContactsList from 'components/ContactsList'
 import NewContactForm from 'components/NewContactForm'
 import Loading from 'components/Loading'
-import { getMyContacts, postContact, patchContact } from "services/ContactService"
+import { getMyContacts, postContact, putContact, deleteContact } from "services/ContactService"
 import { Card, Modal, Button, message, Form } from 'antd'
 import NotFound from 'pages/NotFound';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 
 export default function MyContactsContainer() {
@@ -14,6 +15,7 @@ export default function MyContactsContainer() {
     const [visibleModal, setVisibleModal] = useState(false)
     const [edit, setEdit] = useState(false)
     const [form] = Form.useForm();
+    const { confirm } = Modal;
     const gridStyle = {
         width: '80%',
         marginTop: '20px',
@@ -31,6 +33,31 @@ export default function MyContactsContainer() {
         })
         setVisibleModal(true)
     };
+
+
+    function showConfirm(value) {
+        confirm({
+            title: `Do you Want to delete ${value.firstname} ${value.lastname}?`,
+            icon: <ExclamationCircleOutlined />,
+            content: `You are going to delete ${value.firstname} ${value.lastname}. Are you sure?`,
+            onOk() {
+                setLoading(true)
+                deleteContact(value.id)
+                    .then(function ({ contact }) {
+                        setContacts(contacts.filter(el => el !== value))
+                        setLoading(false)
+                        message.success(`${value.firstname} ${value.lastname} deleted!`)
+                    })
+                    .catch(function ({ error }) {
+                        setError(error)
+                        setLoading(false)
+                    })
+            },
+            onCancel() {
+                //
+            },
+        });
+    }
 
     const handleCancel = e => {
         setVisibleModal(false)
@@ -59,6 +86,7 @@ export default function MyContactsContainer() {
                 })
                 .catch(function ({ error }) {
                     setError(error)
+                    setLoading(false)
                 })
         } else {
             //armo mi objeto para enviar
@@ -68,7 +96,7 @@ export default function MyContactsContainer() {
                 lastname: form.getFieldValue('lastname'),
                 phonenumber: form.getFieldValue('phonenumber'),
             }
-            patchContact(obj)
+            putContact(obj)
                 .then(function ({ contact }) {
                     setContacts(function (contacts) {
                         contacts.find(el => el.id === obj.id).firstname = contact.firstname
@@ -87,6 +115,7 @@ export default function MyContactsContainer() {
                 })
                 .catch(function ({ error }) {
                     setError(error)
+                    setLoading(false)
                 })
         }
     }
@@ -134,7 +163,8 @@ export default function MyContactsContainer() {
                         style={gridStyle}>
                         <ContactsList
                             contacts={contacts}
-                            loadContactForm={handleEditForm} />
+                            loadContactForm={handleEditForm}
+                            onDeleteIContact={showConfirm} />
                         <Modal
                             title="New Contact"
                             visible={visibleModal}

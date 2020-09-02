@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Button } from 'antd';
-import { EditFilled } from '@ant-design/icons';
-const ContactsList = ({ contacts, loadContactForm }) => {
+import { EditFilled, DeleteFilled } from '@ant-design/icons';
+const ContactsList = ({ contacts, loadContactForm, onDeleteIContact }) => {
 
     const columns = [
         {
@@ -32,8 +32,12 @@ const ContactsList = ({ contacts, loadContactForm }) => {
 
     const dataSource = [];
 
-    const passContactData = (value) =>{
+    const editContact = (value) => {
         loadContactForm(value)
+    }
+
+    const deleteContact = (value) => {
+        onDeleteIContact(value)
     }
 
     contacts.map((contact) => {
@@ -42,14 +46,17 @@ const ContactsList = ({ contacts, loadContactForm }) => {
             firstname: contact.firstname,
             lastname: contact.lastname,
             phonenumber: contact.phonenumber,
-            options: <Button value="small" onClick={() => passContactData(contact)}><EditFilled /></Button>
+            options: <>
+                <Button value="small" onClick={() => editContact(contact)} style={{marginRight: '2px'}}><EditFilled /></Button>
+                <Button value="small" onClick={() => deleteContact(contact)} danger><DeleteFilled /></Button>
+            </>
         }
         dataSource.push(cont)
     })
 
     return (
         <div className="container mt-2">
-            <Table dataSource={dataSource} columns={columns}  />
+            <Table dataSource={dataSource} columns={columns} />
         </div>
     )
 }
