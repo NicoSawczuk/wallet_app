@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ContactsList from 'components/ContactsList'
-import NewContactForm from 'components/NewContactForm'
+import NewContactForm from 'components/ContactForm'
 import Loading from 'components/Loading'
 import { getMyContacts, postContact, putContact, deleteContact } from "services/ContactService"
 import { Card, Modal, Button, message, Form } from 'antd'

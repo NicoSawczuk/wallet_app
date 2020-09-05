@@ -35,7 +35,10 @@ export default function NewContactForm({ form, onChange, onSubmit }) {
                     label="Phone number"
                     name="phonenumber"
                     wrapperCol={{ span: 8, }}
-                    rules={[{ required: true, message: 'Please type your phonenumber' }]}
+                    rules={[
+                        { required: true, message: 'Please type your phonenumber' },
+                        { type: 'number', min: 0, max: 99 }
+                    ]}
                 >
                     <Input name="phonenumber" placeholder="Enter phonenumber" />
                 </Form.Item >

@@ -14,7 +14,6 @@ export default class TransferDetail extends React.Component {
         //Se accede al id con {match.params.id}
         return (
             <>
-                <NavBar />
                 <TransferDetailContainer id={match.params.id} />
             </>
         )
