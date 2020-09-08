@@ -1,13 +1,14 @@
 import React from 'react';
 import Routes from 'components/Routes';
-import NavBar from 'components/NavBar'
+import { UserContextProvider } from './context/UserContext';
 
 export default function App() {
 
   return (
     <>
-      
-      <Routes />
+        <UserContextProvider>
+          <Routes />
+        </UserContextProvider>
     </>
   )
 

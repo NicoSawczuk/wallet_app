@@ -1,27 +1,27 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Route, Switch } from "wouter";
 
 import HomeWallet from 'pages/HomeWallet'
 import NotFound from 'pages/NotFound'
 import TransferDetail from 'pages/TransferDetail'
 import MyContacts from 'pages/MyContacts'
 import NavBar from 'components/NavBar';
+import Login from 'pages/Login'
 
-const Routes = () => {
+export default function Routes() {
     return (
         <>
-            <Router>
-                <NavBar />
-                <Switch>
-                    <Route exact path="/" component={HomeWallet} />
-                    <Route exact path="/transfer/:id" component={TransferDetail} />
+            <NavBar />
+            <Switch>
+                <Route component={HomeWallet} path="/" />
+                <Route component={TransferDetail} path="/transfer/:id" />
 
-                    <Route exact path="/contacts/" component={MyContacts} />
-                    <Route exact path="/notfound/" component={NotFound} />
-                </Switch>
-            </Router>
+                <Route component={MyContacts} path="/contacts" />
+                <Route component={NotFound} path="/notfound" />
+
+                <Route component={Login} path="/login" />
+
+            </Switch>
         </>
     )
 }
-
-export default Routes

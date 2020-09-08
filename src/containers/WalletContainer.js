@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import TransferForm from 'components/TransferForm'
 import TransferList from 'components/TransferList'
 import NotFound from 'pages/NotFound';
+
+
 
 import { message } from 'antd'
 
@@ -62,6 +64,7 @@ export default function Wallet() {
     }
 
     useEffect(function () {
+        
         setLoading(true)
 
         getWallet().then(function ({ money, transfers }) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import 'antd/dist/antd.css';
 import { Table, Tag } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link } from "wouter";
 import { EyeOutlined } from '@ant-design/icons'
 
 const TransferList = ({ transfers }) => {
@@ -39,7 +39,7 @@ const TransferList = ({ transfers }) => {
             key: transfer.id,
             description: transfer.description,
             amount: <Tag color={transfer.amount >0 ? "green":"magenta"}>{ transfer.amount}</Tag>,
-            options: <Link to={`/transfer/${transfer.id}`} ><EyeOutlined /></Link>
+            options: <Link href={`/transfer/${transfer.id}`} ><EyeOutlined /></Link>
         }
         dataSource.push(trans)
     })

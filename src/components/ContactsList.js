@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, Button } from 'antd';
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
+
 const ContactsList = ({ contacts, loadContactForm, onDeleteIContact }) => {
 
     const columns = [

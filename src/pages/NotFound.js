@@ -1,6 +1,6 @@
 import React from 'react'
 import { Result, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 
 let NotFound = () => {
     return (
@@ -9,7 +9,7 @@ let NotFound = () => {
             title="500"
             subTitle="Sorry, something went wrong."
             extra={
-                <Link to={`/`} >
+                <Link href={`/`} >
                     <Button type="primary" >Back Home</Button>
                 </Link>
             }
