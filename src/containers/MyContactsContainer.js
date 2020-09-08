@@ -11,7 +11,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 export default function MyContactsContainer() {
     const [contacts, setContacts] = useState([])
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState({ status: '', statusText: '' })
     const [visibleModal, setVisibleModal] = useState(false)
     const [edit, setEdit] = useState(false)
     const [form] = Form.useForm();
@@ -61,13 +61,11 @@ export default function MyContactsContainer() {
     }
 
     const handleCancel = e => {
-        e.preventDefault()
         setVisibleModal(false)
     };
 
 
     const handleSubmitForm = e => {
-        e.preventDefault()
         setLoading(true)
         if (!edit) {
             const obj = {
@@ -88,8 +86,11 @@ export default function MyContactsContainer() {
                     setLoading(false)
                     message.success('Contact saved!')
                 })
-                .catch(function ({ error }) {
-                    setError(error)
+                .catch((error) => {
+                    setError({
+                        status: String(error.response.status),
+                        statusText: String(error.response.statusText)
+                    })
                     setLoading(false)
                 })
         } else {
@@ -118,8 +119,11 @@ export default function MyContactsContainer() {
                     setLoading(false)
                     message.success(`${obj.firstname} ${obj.lastname} updated!`)
                 })
-                .catch(function ({ error }) {
-                    setError(error)
+                .catch((error) => {
+                    setError({
+                        status: String(error.response.status),
+                        statusText: String(error.response.statusText)
+                    })
                     setLoading(false)
                 })
         }
@@ -149,13 +153,16 @@ export default function MyContactsContainer() {
                     setLoading(false)
                 })
             .catch((error) => {
-                setError(error)
+                setError({
+                    status: String(error.response.status),
+                    statusText: String(error.response.statusText)
+                })
                 setLoading(false)
             })
     }, [])
 
-    if (error) {
-        return (<NotFound />)
+    if (error.status != '' && error.statusText != '') {
+        return (<NotFound error={error} />)
     }
     return (
         <>

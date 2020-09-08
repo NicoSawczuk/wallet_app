@@ -18,7 +18,7 @@ export default function Wallet() {
     const [money, setMoney] = useState(0.0)
     const [transfers, setTransfers] = useState([])
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState({ status: '', statusText: '' })
     const [form, setForm] = useState({
         description: '',
         amount: '',
@@ -43,46 +43,56 @@ export default function Wallet() {
 
         setLoading(true)
         const token = window.sessionStorage.getItem('token')
-        postTransfer(form, token).then(function ({ amount, transfer }) {
-            setMoney(money + amount)
-            setTransfers(transfers.concat(transfer))
+        postTransfer(form, token)
+            .then(function ({ amount, transfer }) {
+                setMoney(money + amount)
+                setTransfers(transfers.concat(transfer))
 
-            setForm({
-                description: "",
-                amount: "",
-                wallet_id: 1,
-            });
-            setLoading(false)
-            message.success('Transfer saved!')
+                setForm({
+                    description: "",
+                    amount: "",
+                    wallet_id: 1,
+                });
+                setLoading(false)
+                message.success('Transfer saved!')
 
-        }).catch(function ({ error }) {
-            setError(error)
-        })
+            })
+            .catch((error) => {
+                setError({
+                    status: String(error.response.status),
+                    statusText: String(error.response.statusText)
+                })
+                setLoading(false)
+            })
 
 
     }
 
     useEffect(function () {
-        
+
         setLoading(true)
         const token = window.sessionStorage.getItem('token')
-        getWallet(token).then(function ({ money, transfers }) {
-            setMoney(money)
-            setTransfers(transfers)
-            setLoading(false)
+        getWallet(token)
+            .then(function ({ money, transfers }) {
+                setMoney(money)
+                setTransfers(transfers)
+                setLoading(false)
 
-        })
-        .catch((error) => {
-            setError(error)
-            setLoading(false)
-        })
+            })
+            .catch((error) => {
+                setError({
+                    status: String(error.response.status),
+                    statusText: String(error.response.statusText)
+                })
+                setLoading(false)
+            })
 
 
     }, [])
 
 
-    if (error) {
-        return (<NotFound />)
+    if (error.status != '' && error.statusText != '') {
+        return (<NotFound error={error} />)
     }
 
     return (

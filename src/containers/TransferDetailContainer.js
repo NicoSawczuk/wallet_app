@@ -7,7 +7,7 @@ import CardLoader from 'components/CardLoader';
 export default function TransferDetailContainer({ id }) {
 
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState({ status: '', statusText: '' })
     const [transfer, setTransfer] = useState({
         description: '',
         amount: '',
