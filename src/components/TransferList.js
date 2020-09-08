@@ -1,11 +1,13 @@
 import React from 'react'
 import 'antd/dist/antd.css';
-import { Table, Tag } from 'antd';
-import { Link } from "wouter";
-import { EyeOutlined } from '@ant-design/icons'
+import { Table, Tag, Button } from 'antd';
+import {  EyeFilled } from '@ant-design/icons'
+
+import { useLocation } from 'wouter';
 
 const TransferList = ({ transfers }) => {
 
+    const [, setLocation] = useLocation();
 
 
     const columns = [
@@ -39,7 +41,7 @@ const TransferList = ({ transfers }) => {
             key: transfer.id,
             description: transfer.description,
             amount: <Tag color={transfer.amount >0 ? "green":"magenta"}>{ transfer.amount}</Tag>,
-            options: <Link href={`/transfer/${transfer.id}`} ><EyeOutlined /></Link>
+            options: <Button value="small" onClick={()=>setLocation(`/transfer/${transfer.id}`)} ><EyeFilled /></Button>
         }
         dataSource.push(trans)
     })

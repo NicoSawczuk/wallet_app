@@ -24,29 +24,59 @@ import { API_URL } from "services/settings"
 //         })
 // }
 
-export async function getMyContacts() {
-    const res = await axios.get(`${API_URL}/contacts`);
+export async function getMyContacts(token) {
+    const res = await axios({
+        method: 'get',
+        url: `${API_URL}/contacts`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    });
     return {
         contacts: res.data,
     }
 }
 
-export async function postContact(form) {
-    const res = await axios.post(`${API_URL}/contacts`, form);
+export async function postContact(form, token) {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/contacts`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        data:form
+    });
     return {
         contact: res.data,
     }
 }
 
-export async function putContact(form) {
-    const res = await axios.put(`${API_URL}/contacts`, form);
+export async function putContact(form,token) {
+    const res = await axios({
+        method: 'put',
+        url: `${API_URL}/contacts/${form.id}`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        data:form
+    });
     return {
         contact: res.data,
     }
 }
 
-export async function deleteContact(form) {
-    const res = await axios.delete(`${API_URL}/contacts/${form}`);
+export async function deleteContact(form, token) {
+    const res = await axios({
+        method: 'delete',
+        url: `${API_URL}/contacts/${form}`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    });
     return {
         
         contact: res.data,

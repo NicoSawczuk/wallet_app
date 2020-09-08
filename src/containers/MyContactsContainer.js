@@ -42,7 +42,8 @@ export default function MyContactsContainer() {
             content: `You are going to delete ${value.firstname} ${value.lastname}. Are you sure?`,
             onOk() {
                 setLoading(true)
-                deleteContact(value.id)
+                const token = window.sessionStorage.getItem('token')
+                deleteContact(value.id, token)
                     .then(function ({ contact }) {
                         setContacts(contacts.filter(el => el !== value))
                         setLoading(false)
@@ -60,11 +61,13 @@ export default function MyContactsContainer() {
     }
 
     const handleCancel = e => {
+        e.preventDefault()
         setVisibleModal(false)
     };
 
 
     const handleSubmitForm = e => {
+        e.preventDefault()
         setLoading(true)
         if (!edit) {
             const obj = {
@@ -72,7 +75,8 @@ export default function MyContactsContainer() {
                 lastname: form.getFieldValue('lastname'),
                 phonenumber: form.getFieldValue('phonenumber'),
             }
-            postContact(obj)
+            const token = window.sessionStorage.getItem('token')
+            postContact(obj, token)
                 .then(function ({ contact }) {
                     setContacts(contacts.concat(contact))
                     form.setFieldsValue({
@@ -96,7 +100,8 @@ export default function MyContactsContainer() {
                 lastname: form.getFieldValue('lastname'),
                 phonenumber: form.getFieldValue('phonenumber'),
             }
-            putContact(obj)
+            const token = window.sessionStorage.getItem('token')
+            putContact(obj, token)
                 .then(function ({ contact }) {
                     setContacts(function (contacts) {
                         contacts.find(el => el.id === obj.id).firstname = contact.firstname
@@ -134,9 +139,9 @@ export default function MyContactsContainer() {
 
     useEffect(function () {
         setLoading(true)
-
+        const token = window.sessionStorage.getItem('token')
         //Pedimos los contactos
-        getMyContacts()
+        getMyContacts(token)
             .then(
 
                 ({ contacts }) => {

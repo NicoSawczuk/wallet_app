@@ -16,8 +16,8 @@ export default function TransferDetailContainer({ id }) {
 
     useEffect(function () {
         setLoading(true)
-
-        getTransferDetails(id)
+        const token = window.sessionStorage.getItem('token')
+        getTransferDetails(id, token)
             .then(function ({ transfer }) {
                 setTransfer(transfer)
                 setLoading(false)

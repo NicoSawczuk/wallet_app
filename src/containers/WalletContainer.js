@@ -41,10 +41,9 @@ export default function Wallet() {
         //Primero anulamos es refresco de la pagina
         e.preventDefault()
 
-        console.log(e)
         setLoading(true)
-
-        postTransfer(form).then(function ({ amount, transfer }) {
+        const token = window.sessionStorage.getItem('token')
+        postTransfer(form, token).then(function ({ amount, transfer }) {
             setMoney(money + amount)
             setTransfers(transfers.concat(transfer))
 
@@ -66,8 +65,8 @@ export default function Wallet() {
     useEffect(function () {
         
         setLoading(true)
-
-        getWallet().then(function ({ money, transfers }) {
+        const token = window.sessionStorage.getItem('token')
+        getWallet(token).then(function ({ money, transfers }) {
             setMoney(money)
             setTransfers(transfers)
             setLoading(false)

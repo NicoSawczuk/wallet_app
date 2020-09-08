@@ -8,7 +8,7 @@ import { useLocation } from "wouter";
 export default function useUser() {
     const { userAuth, token, setUserAuth, setToken } = useContext(Context)
 
-    const [location, setLocation] = useLocation();
+    const [,setLocation] = useLocation();
     const [errorMessage, setErrorMessage] = useState(null)
 
     const login = useCallback(({ email, password }) => {

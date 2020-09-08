@@ -23,13 +23,28 @@ import axios from 'axios'
 // }
 
 
-export async function getTransferDetails(id) {
-    const res = await axios.get(`${API_URL}/transfer/${id}`);
+export async function getTransferDetails(id, token) {
+    const res = await axios({
+        method: 'get',
+        url: `${API_URL}/transfer/${id}`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    });
     return {transfer: res.data}
 }
 
-export async function postTransfer(form) {
-    const res = await axios.post(`${API_URL}/transfer`, form);
+export async function postTransfer(form, token) {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/transfer`,
+        headers:{
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        data:form
+    });
     return {
         amount: parseInt(res.data.amount),
         transfer: res.data

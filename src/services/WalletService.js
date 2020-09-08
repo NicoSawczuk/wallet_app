@@ -17,10 +17,20 @@ import axios from 'axios'
 
 // }
 
-export async function getWallet(){
-    const res = await axios.get(`${API_URL}/wallet`);
+
+export async function getWallet(token){
+    //const res = await axios.get(`${API_URL}/wallet`);
+    const res = await axios({
+        method: 'get',
+        url: `${API_URL}/wallet`,
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+      })
     return {
         money: res.data.money,
         transfers: res.data.transfers
     }
 }
+
