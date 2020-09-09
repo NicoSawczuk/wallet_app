@@ -19,7 +19,11 @@ export default function TransferDetailContainer({ id }) {
         const token = window.sessionStorage.getItem('token')
         getTransferDetails(id, token)
             .then(function ({ transfer }) {
-                setTransfer(transfer)
+                setTransfer({
+                    description: transfer.description,
+                    amount: transfer.amount,
+                    wallet_id: transfer.wallet_id
+                })
                 setLoading(false)
             })
             .catch(function ({ error }) {

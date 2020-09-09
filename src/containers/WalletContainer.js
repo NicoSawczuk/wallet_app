@@ -2,9 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import TransferForm from 'components/TransferForm'
 import TransferList from 'components/TransferList'
 import NotFound from 'pages/NotFound';
-
-
-
 import { message } from 'antd'
 
 import Loading from 'components/Loading'
@@ -12,9 +9,11 @@ import Loading from 'components/Loading'
 import { postTransfer } from 'services/TransferService'
 import { getWallet } from 'services/WalletService';
 
+import Context from 'context/UserContext'
+
 
 export default function Wallet() {
-
+    const {userAuth} = useContext(Context)
     const [money, setMoney] = useState(0.0)
     const [transfers, setTransfers] = useState([])
     const [loading, setLoading] = useState(false)
@@ -22,7 +21,7 @@ export default function Wallet() {
     const [form, setForm] = useState({
         description: '',
         amount: '',
-        wallet_id: 1
+        wallet_id: userAuth.id
     })
 
 
@@ -51,7 +50,7 @@ export default function Wallet() {
                 setForm({
                     description: "",
                     amount: "",
-                    wallet_id: 1,
+                    wallet_id: userAuth.id,
                 });
                 setLoading(false)
                 message.success('Transfer saved!')
@@ -67,12 +66,11 @@ export default function Wallet() {
 
 
     }
-
+ 
     useEffect(function () {
-
         setLoading(true)
         const token = window.sessionStorage.getItem('token')
-        getWallet(token)
+        getWallet(userAuth.id,token)
             .then(function ({ money, transfers }) {
                 setMoney(money)
                 setTransfers(transfers)
@@ -88,7 +86,7 @@ export default function Wallet() {
             })
 
 
-    }, [])
+    }, [userAuth])
 
 
     if (error.status != '' && error.statusText != '') {

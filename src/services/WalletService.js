@@ -18,11 +18,11 @@ import axios from 'axios'
 // }
 
 
-export async function getWallet(token){
+export async function getWallet(id,token){
     //const res = await axios.get(`${API_URL}/wallet`);
     const res = await axios({
         method: 'get',
-        url: `${API_URL}/wallet`,
+        url: `${API_URL}/wallet/${id}`,
         headers: {
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`,
