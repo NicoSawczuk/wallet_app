@@ -70,7 +70,8 @@ export default function Wallet() {
     useEffect(function () {
         setLoading(true)
         const token = window.sessionStorage.getItem('token')
-        getWallet(userAuth.id, token)
+        const id = userAuth.id ? userAuth.id : window.sessionStorage.getItem('user_id')
+        getWallet(id, token)
             .then(function ({ money, transfers }) {
                 setMoney(money)
                 setTransfers(transfers)

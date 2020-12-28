@@ -19,6 +19,7 @@ export default function useUser() {
                 if (message == null) {
                     setUserAuth({ id: user.id, name: user.name, email: user.email })
                     window.sessionStorage.setItem('token', access_token)
+                    window.sessionStorage.setItem('user_id', user.id)
                     setToken(() => window.sessionStorage.getItem('token'))
                     setLocation("/")
                 } else {
@@ -29,6 +30,7 @@ export default function useUser() {
             })
             .catch(function ({ error }) {
                 window.sessionStorage.removeItem('token')
+                window.sessionStorage.removeItem('user_id')
                 setToken(() => window.sessionStorage.getItem('token'))
 
             })
@@ -36,6 +38,7 @@ export default function useUser() {
 
     const logout = useCallback(() => {
         window.sessionStorage.removeItem('token')
+        window.sessionStorage.removeItem('user_id')
         setToken(() => window.sessionStorage.getItem('token'))
         setLocation("/login")
     }, [setToken])
