@@ -13,7 +13,7 @@ import useUser from 'hooks/useUser'
 
 
 export default function Wallet() {
-    const {userAuth} = useUser()
+    const { userAuth } = useUser()
     const [money, setMoney] = useState(0.0)
     const [transfers, setTransfers] = useState([])
     const [loading, setLoading] = useState(false)
@@ -44,7 +44,7 @@ export default function Wallet() {
         const token = window.sessionStorage.getItem('token')
         postTransfer(form, token)
             .then(function ({ amount, transfer }) {
-                setMoney(money + amount)
+                setMoney(parseInt(money) + parseInt(amount))
                 setTransfers(transfers.concat(transfer))
 
                 setForm({
@@ -66,11 +66,11 @@ export default function Wallet() {
 
 
     }
- 
+
     useEffect(function () {
         setLoading(true)
         const token = window.sessionStorage.getItem('token')
-        getWallet(userAuth.id,token)
+        getWallet(userAuth.id, token)
             .then(function ({ money, transfers }) {
                 setMoney(money)
                 setTransfers(transfers)
