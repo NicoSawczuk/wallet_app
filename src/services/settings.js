@@ -1,2 +1,2 @@
-export const API_URL = 'http://api-laravel-nico.herokuapp.com/api'
+export const API_URL = 'https://api-laravel-nico.herokuapp.com/api'
 
