@@ -45,6 +45,8 @@ export default function useUser() {
         error: Boolean(errorMessage),
         errorMessage,
         login,
-        logout
+        logout,
+        userAuth,
+        token
     }
 }

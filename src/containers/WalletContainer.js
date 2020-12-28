@@ -9,11 +9,11 @@ import Loading from 'components/Loading'
 import { postTransfer } from 'services/TransferService'
 import { getWallet } from 'services/WalletService';
 
-import Context from 'context/UserContext'
+import useUser from 'hooks/useUser'
 
 
 export default function Wallet() {
-    const {userAuth} = useContext(Context)
+    const {userAuth} = useUser()
     const [money, setMoney] = useState(0.0)
     const [transfers, setTransfers] = useState([])
     const [loading, setLoading] = useState(false)
