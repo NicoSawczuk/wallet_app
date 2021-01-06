@@ -56,8 +56,8 @@ const ContactsList = ({ contacts, loadContactForm, onDeleteIContact }) => {
     })
 
     return (
-        <div className="container mt-2">
-            <Table dataSource={dataSource} columns={columns} />
+        <div>
+            <Table dataSource={dataSource} columns={columns} size="small" bordered  />
         </div>
     )
 }

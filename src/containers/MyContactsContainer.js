@@ -17,7 +17,6 @@ export default function MyContactsContainer() {
     const [form] = Form.useForm();
     const { confirm } = Modal;
     const gridStyle = {
-        width: '80%',
         marginTop: '20px',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -168,32 +167,38 @@ export default function MyContactsContainer() {
         <>
             {loading ? <Loading /> :
                 <>
-                    <Card
-                        type="inner"
-                        title="My Contacts"
-                        extra={<Button type="primary" onClick={showModal}>New</Button>}
-                        style={gridStyle}>
-                        <ContactsList
-                            contacts={contacts}
-                            loadContactForm={handleEditForm}
-                            onDeleteIContact={showConfirm} />
-                        <Modal
-                            title="New Contact"
-                            visible={visibleModal}
-                            footer={[
-                                <Button key="back" onClick={handleCancel}>
-                                    Close
+                    <div className="container">
+                        <div className="m-t-md">
+                            <Card
+                                title="My Contacts"
+                                extra={<Button type="primary" onClick={showModal}>New</Button>}
+                                style={gridStyle}
+                                bordered={false}
+                                size="small">
+                            </Card>
+                            <ContactsList
+                                contacts={contacts}
+                                loadContactForm={handleEditForm}
+                                onDeleteIContact={showConfirm} />
+                            <Modal
+                                title="New Contact"
+                                visible={visibleModal}
+                                footer={[
+                                    <Button key="back" onClick={handleCancel}>
+                                        Close
                                 </Button>,
-                            ]}
-                        >
-                            <div>
-                                <NewContactForm
-                                    form={form}
-                                    onSubmit={handleSubmitForm}
-                                />
-                            </div>
-                        </Modal>
-                    </Card>
+                                ]}
+                            >
+                                <div>
+                                    <NewContactForm
+                                        form={form}
+                                        onSubmit={handleSubmitForm}
+                                    />
+                                </div>
+                            </Modal>
+                        </div>
+                    </div>
+
                 </>
             }
 
